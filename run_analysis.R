@@ -19,9 +19,12 @@ names(y_train) <- "activity_id"
 names(subject_test) <- "subject"
 names(subject_train) <- "subject"
 
+##  
 test_with_subject_and_activity <- cbind(subject_test,y_test,x_test)
 train_with_subject_and_activity <- cbind(subject_train,y_train,x_train)
 
+## Uses descriptive activity names to name the activities 
+## in the data set
 merged_test_data <- merge(test_with_subject_and_activity,activity_labels,
                           by.x="activity_id",by.y="activity_id",all=T)
 merged_train_data <- merge(train_with_subject_and_activity,activity_labels,
@@ -29,15 +32,8 @@ merged_train_data <- merge(train_with_subject_and_activity,activity_labels,
 
 ## Extracts only the measurements on the mean and standard 
 ## deviation for each measurement. 
-train_extract <- merged_test_data[grep("mean()|std()",names(merged_train_data),value=F)]
-test_extract <- merged_test_data[grep("mean()|std()",names(merged_test_data),value=F)]
-
-## Uses descriptive activity names to name the activities 
-## in the data set
-
-
-## Appropriately labels the data set with descriptive activity names. 
-
+train_extract <- merged_train_data[,grep("mean()|std()",names(merged_train_data),value=F)]
+test_extract <- merged_test_data[,grep("mean()|std()",names(merged_test_data),value=F)]
 
 ## Creates a second, independent tidy data set with the 
 ## average of each variable for each activity and each subject. 
