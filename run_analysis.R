@@ -1,6 +1,6 @@
 ## Merges the training and the test sets to create one data set.
 activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt")
-names(activity_labels) <- c("activity_id","activity_label")
+names(activity_labels) <- c("activity_id","activity")
 
 features <- read.table("UCI HAR Dataset/features.txt") ## x column labels
 
@@ -28,14 +28,24 @@ train_with_subject_and_activity <- cbind(subject_train,y_train,x_train)
 merged_test_data <- merge(test_with_subject_and_activity,activity_labels,
                           by.x="activity_id",by.y="activity_id",all=T)
 merged_train_data <- merge(train_with_subject_and_activity,activity_labels,
-                           by.x="activity_id",by.y="activity_id",all=T)
+                          by.x="activity_id",by.y="activity_id",all=T)
 
 ## Extracts only the measurements on the mean and standard 
 ## deviation for each measurement. 
-train_extract <- merged_train_data[,grep("mean()|std()",names(merged_train_data),value=F)]
-test_extract <- merged_test_data[,grep("mean()|std()",names(merged_test_data),value=F)]
+train_extract <- merged_train_data[,grep("mean()|std()|activity|subject",names(merged_train_data),value=F)]
+test_extract <- merged_test_data[,grep("mean()|std()|activity|subject",names(merged_test_data),value=F)]
+
+## Bind data sets
+test_train_Bind <- rbind(train_extract, test_extract)
+extract <- test_train_Bind[,2:82]
 
 ## Creates a second, independent tidy data set with the 
 ## average of each variable for each activity and each subject. 
+## subject, activity, variable, average
+melted <- melt(extract,id=c("subject","activity"),
+               measure.vars=names(extract)[c(-1,-81)])
+casted <- dcast(melted, subject + activity ~ variable, mean)
+
+write.table(casted, "HAR Data - Mean by Subject and Activity.txt")
 
 
