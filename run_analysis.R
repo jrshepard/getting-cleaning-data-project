@@ -1,4 +1,4 @@
-c## Merges the training and the test sets to create one data set.
+## Merges the training and the test sets to create one data set.
 
 ##read in activity labels and define column names
 activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt")
