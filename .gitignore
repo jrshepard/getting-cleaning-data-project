@@ -1,3 +1,9 @@
 UCI HAR Dataset/
 
 .Rhistory
+
+*.html
+
+*.csv
+
+*.txt
